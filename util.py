@@ -6,6 +6,13 @@ class Action(object):
         self.action = action
         self.todoItem = todoItem
 
+    def __str__(self):
+        if self.action == Action.REMOVE:
+            return 'remove '+str(self.todoItem)
+        if self.action == Action.ADD:
+            return 'add '+str(self.todoItem)
+
+
 class Selection(object):
     def __init__(self, addStrArgs, todoItem):
         self.addStrArgs = addStrArgs

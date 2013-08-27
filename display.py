@@ -2,10 +2,16 @@ import curses
 from util import SelectionList, Selection, Action
 
 def highlightSelection(stdscr, selection):
+    """
+    Highlights *currentSelection* on *stdscr*.
+    """
     s = tuple(list(selection.addStrArgs)+[curses.A_REVERSE])
     stdscr.addstr(*s)
 
 def switchSelection(stdscr, lastSelection, currentSelection):
+    """
+    Removes highlight of *lastSelection* and highlights *currentSelection*.
+    """
     stdscr.addstr(*lastSelection.addStrArgs)
     highlightSelection(stdscr, currentSelection)
 

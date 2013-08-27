@@ -1,13 +1,9 @@
 import sys
-
 import logging
 todoLogger = logging.getLogger('todo')
-
-import todotools
-import argparse
+#todoLogger.setLevel(logging.DEBUG)
 
 import curses
-
 import pickle
 
 from util import Action
@@ -20,6 +16,7 @@ def main(stdscr):
 
     while True:
         action = display.selectTodoItem(stdscr, todoList)
+        todoLogger.debug('User chose to '+str(action)+'.')
         if action == None: break
         if action.action == Action.REMOVE:
             todoList.remove(action.todoItem)
