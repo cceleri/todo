@@ -1,4 +1,10 @@
+class Action(object):
+    REMOVE = 0
+    ADD = 1
 
+    def __init__(self, action, todoItem):
+        self.action = action
+        self.todoItem = todoItem
 
 class Selection(object):
     def __init__(self, addStrArgs, todoItem):

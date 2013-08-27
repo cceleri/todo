@@ -10,7 +10,7 @@ import curses
 
 import pickle
 
-from util import SelectionList, Selection
+from util import SelectionList, Selection, Action
 from todotools import TodoListEmpty
 
 def displayTodoList(stdscr, todoList, i=1):
@@ -39,9 +39,10 @@ def switchSelection(stdscr, lastSelection, currentSelection):
     highlightSelection(stdscr, currentSelection)
 
 def selectTodoItem(stdscr, todoList):
+    stdscr.clear()
     selectionList = displayTodoList(stdscr, todoList)
-    highlightSelection(stdscr, selectionList.current())
     currentSelection = selectionList.current()
+    highlightSelection(stdscr, currentSelection)
 
     while True:
         lastSelection = currentSelection
@@ -51,16 +52,9 @@ def selectTodoItem(stdscr, todoList):
         elif k in ['j', curses.KEY_DOWN]:
             currentSelection = selectionList.next()
         elif k in ['d']:
-            todoList.remove(currentSelection.todoItem)
-            if todoList.empty(): raise TodoListEmpty
-            stdscr.clear()
-            currentIndex = selectionList.getCurrentIndex()
-            selectionList = displayTodoList(stdscr, todoList)
-            selectionList.setCurrentIndex(currentIndex)
-            lastSelection = selectionList.current()
-            currentSelection = selectionList.current()
+            return Action(Action.REMOVE, currentSelection.todoItem)
         elif k == 'q':
-            break
+            return None
 
         switchSelection(stdscr, lastSelection, currentSelection)
         stdscr.refresh()
@@ -71,10 +65,11 @@ def main(stdscr):
     todoList = pickle.load(open('sample.todo','rb'))
 
     while True:
-        try:
-            action = selectTodoItem(stdscr, todoList)
-        except TodoListEmpty:
-            break
+        action = selectTodoItem(stdscr, todoList)
+        if action == None: break
+        if action.action == Action.REMOVE:
+            todoList.remove(action.todoItem)
+            if todoList.empty(): break
 
 if __name__ == '__main__':
     curses.wrapper(main)
