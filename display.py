@@ -1,5 +1,12 @@
 import curses
-from util import SelectionList, Selection, Action
+from selection import SelectionList, Selection
+import action
+from action import Action
+
+UP     = ['k', curses.KEY_UP]
+DOWN   = ['j', curses.KEY_DOWN]
+DELETE = ['d']
+QUIT   = ['q']
 
 def highlightSelection(stdscr, selection):
     """
@@ -27,14 +34,18 @@ def selectTodoItem(stdscr, todoList):
     while True:
         lastSelection = currentSelection
         k = stdscr.get_wch()
-        if k in ['k', curses.KEY_UP]:
-            currentSelection = selectionList.prev()
-        elif k in ['j', curses.KEY_DOWN]:
-            currentSelection = selectionList.next()
-        elif k in ['d']:
-            return Action(Action.REMOVE, currentSelection.todoItem)
-        elif k == 'q':
-            return None
+        if k in UP:
+            currentSelection = selectionList.prevItem()
+        elif k in DOWN:
+            currentSelection = selectionList.nextItem()
+        elif k in LEFT:
+            currentSelection = selectionList.prevCategory()
+        elif k in RIGHT:
+            currentSelection = selectionList.nextCategory()
+        elif k in DELETE:
+            return Action(action.REMOVE, currentSelection.todoItem)
+        elif k in QUIT:
+            return Action(action.QUIT)
 
         switchSelection(stdscr, lastSelection, currentSelection)
         stdscr.refresh()
@@ -62,3 +73,4 @@ def displayTodoList(stdscr, todoList):
 
     return selectionList
 
+# vim: set ts=4 sw=4 expandtab smarttab:

@@ -1,52 +1,8 @@
-class Action(object):
-    REMOVE = 0
-    ADD = 1
+def binarySearch(sortedList, value):
+    if len(sortedList) == 1:
+        return sortedList[0]
+    if value < sortedList[len(sortedList)/2]:
+        return binarySearch(sortedList[:len(sortedList)/2], value)
+    return binarySearch(sortedList[len(sortedList)/2:], value)
 
-    def __init__(self, action, todoItem):
-        self.action = action
-        self.todoItem = todoItem
-
-    def __str__(self):
-        if self.action == Action.REMOVE:
-            return 'remove '+str(self.todoItem)
-        if self.action == Action.ADD:
-            return 'add '+str(self.todoItem)
-
-
-class Selection(object):
-    def __init__(self, addStrArgs, todoItem):
-        self.addStrArgs = addStrArgs
-        self.todoItem = todoItem
-
-class SelectionList(list):
-    def __init__(self, iterator=[]):
-        list.__init__(self, iterator)
-        self._current = 0
-
-    def current(self):
-        return self[self._current]
-
-    def getCurrentIndex(self):
-        return self._current
-
-    def setCurrentIndex(self, index):
-        if index >= len(self):
-            index = len(self) - 1
-        if index < 0:
-            index = 0
-        self._current = index
-
-    def remove(self, value):
-        list.remove(self, value)
-        if self._current == len(self):
-            self._current -= 1
-
-    def next(self):
-        if self._current < len(self)-1:
-            self._current += 1
-        return self[self._current]
-
-    def prev(self):
-        if self._current > 0:
-            self._current -= 1
-        return self[self._current]
+# vim: set ts=4 sw=4 expandtab smarttab:
