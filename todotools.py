@@ -4,6 +4,9 @@ import logging
 
 todotoolsLogger = logging.getLogger('todo.todotools')
 
+class TodoListEmpty(Exception):
+    pass
+
 class TodoList(defaultdict):
     def __init__(self, todoItems=[]):  
         defaultdict.__init__(self, list) 
@@ -12,7 +15,18 @@ class TodoList(defaultdict):
 
     @property
     def categories(self, ):
-        return [key for key in self.keys()]
+        return self.keys()
+
+    def empty(self):
+        return False if self.values() else True
+
+    def add(self, todoItem):
+        self[todoItem.category].append(todoItem)
+
+    def remove(self, todoItem):
+        self[todoItem.category].remove(todoItem)
+        if not self[todoItem.category]:
+            del self[todoItem.category]
 
     # required method for pickling because defaultdict
     # does not do this nicely
